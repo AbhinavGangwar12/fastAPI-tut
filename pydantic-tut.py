@@ -78,3 +78,23 @@ person1 = Person(**person_info)
 
 print_person(person1)
 # print_person(person2)
+
+
+#converts the pydantic to python-dict 
+temp = person1.model_dump()
+print(type(temp))
+
+#converts the pydantic model to json format
+temp_json = person1.model_dump_json()
+print(type(temp_json))
+
+
+#can convert specific fields 
+specific_temp = person1.model_dump(include=['name', 'height'])
+print(specific_temp)
+#similar goes with json
+
+#if you want to exclude specific fields 
+specific_temp_ = person1.model_dump(exclude=['name', 'height'])
+print(specific_temp_)
+#similar goes with json
