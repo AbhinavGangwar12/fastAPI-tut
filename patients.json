@@ -40,12 +40,12 @@
         "verdict": "Normal"
     },
     "P005": {
-        "name": "Neha Sinha",
+        "name": "Serena Sinha",
         "city": "Kolkata",
         "age": 30,
         "gender": "female",
         "height": 1.55,
-        "weight": 75,
+        "weight": 75.0,
         "bmi": 31.22,
         "verdict": "Obese"
     },

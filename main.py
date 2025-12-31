@@ -31,6 +31,13 @@ class Patient(BaseModel):
         else:
             return "Obese"
 
+class UpdatePatient(BaseModel):
+    name: Optional[str] = Field(None, max_length=50, title="Patient Name")
+    city: Optional[str] = Field(None, title="Home City")
+    age: Optional[int] = Field(None, gt=0, lt=120)
+    gender: Optional[str] = None
+    height: Optional[float] = Field(None, gt=0, description="Height in meters")
+    weight: Optional[float] = Field(None, gt=0, description="Weight in kilograms")
 
 # -------------------- FastAPI App --------------------
 
@@ -82,4 +89,30 @@ def create_patient(patient: Patient):
     patient_manager.save_data(data)
 
     return {"message": "Patient created successfully"}
+
+@app.put("/update/{patient_id}", status_code=200)
+def update_patient(patient_id: str, request: UpdatePatient):
+    data = patient_manager.get_info()
+
+    if patient_id not in data:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    patient_data = data[patient_id]
+    updated_fields = request.model_dump(exclude_unset=True)
+
+    patient_data.update(updated_fields)
+
+    # Validate with Patient model
+    validated_patient = Patient(id=patient_id, **patient_data)
+
+    # Save without id (id is the key)
+    data[patient_id] = validated_patient.model_dump(exclude={"id"})
+    patient_manager.save_data(data)
+
+    return {
+        "message": "Patient updated successfully",
+        "patient": validated_patient
+    }
+
+
 
