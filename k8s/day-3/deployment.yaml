@@ -1,0 +1,31 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: dummy-backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dummy-backend
+  template:
+    metadata:
+      labels:
+        app: dummy-backend
+    spec:
+      containers:
+      - name: nginx-dummy-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80  
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: DB_PASSWORD
+
